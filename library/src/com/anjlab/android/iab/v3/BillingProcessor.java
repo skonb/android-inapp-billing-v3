@@ -171,20 +171,31 @@ public class BillingProcessor extends BillingBase {
 	}
 
 	public boolean purchase(Activity activity, String productId) {
-		return purchase(activity, productId, Constants.PRODUCT_TYPE_MANAGED);
+		return purchase(activity, productId, Constants.PRODUCT_TYPE_MANAGED, null);
 	}
 
 	public boolean subscribe(Activity activity, String productId) {
-		return purchase(activity, productId, Constants.PRODUCT_TYPE_SUBSCRIPTION);
+		return purchase(activity, productId, Constants.PRODUCT_TYPE_SUBSCRIPTION, null);
 	}
 
-	private boolean purchase(Activity activity, String productId, String purchaseType) {
+	public boolean purchase(Activity activity, String productId, String developerPayload) {
+		return purchase(activity, productId, Constants.PRODUCT_TYPE_MANAGED, developerPayload);
+	}
+
+	public boolean subscribe(Activity activity, String productId, String developerPayload) {
+		return purchase(activity, productId, Constants.PRODUCT_TYPE_SUBSCRIPTION, developerPayload);
+	}
+
+
+	private boolean purchase(Activity activity, String productId, String purchaseType, String developerPayload) {
 		if (!isInitialized() || TextUtils.isEmpty(productId) || TextUtils.isEmpty(purchaseType))
 			return false;
 		try {
-			String purchasePayload = purchaseType + ":" + UUID.randomUUID().toString();
-			savePurchasePayload(purchasePayload);
-			Bundle bundle = billingService.getBuyIntent(Constants.GOOGLE_API_VERSION, contextPackageName, productId, purchaseType, purchasePayload);
+			if(developerPayload == null) {
+				developerPayload = purchaseType + ":" + UUID.randomUUID().toString();
+			}
+			savePurchasePayload(developerPayload);
+			Bundle bundle = billingService.getBuyIntent(Constants.GOOGLE_API_VERSION, contextPackageName, productId, purchaseType, developerPayload);
 			if (bundle != null) {
 				int response = bundle.getInt(Constants.RESPONSE_CODE);
 				if (response == Constants.BILLING_RESPONSE_RESULT_OK) {
