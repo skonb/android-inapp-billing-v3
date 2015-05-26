@@ -171,11 +171,11 @@ public class BillingProcessor extends BillingBase {
 	}
 
 	public boolean purchase(Activity activity, String productId) {
-		return purchase(activity, productId, Constants.PRODUCT_TYPE_MANAGED, null);
+		return purchase(activity, productId,  null);
 	}
 
 	public boolean subscribe(Activity activity, String productId) {
-		return purchase(activity, productId, Constants.PRODUCT_TYPE_SUBSCRIPTION, null);
+		return subscribe(activity, productId,  null);
 	}
 
 	public boolean purchase(Activity activity, String productId, String developerPayload) {
