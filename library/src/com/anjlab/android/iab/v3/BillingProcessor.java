@@ -194,7 +194,7 @@ public class BillingProcessor extends BillingBase {
 			if(developerPayload == null) {
 				developerPayload = purchaseType + ":" + UUID.randomUUID().toString();
 			}else{
-				developerPayload = purchaseType + developerPayload;
+				developerPayload = purchaseType + ":" + developerPayload;
 			}
 			savePurchasePayload(developerPayload);
 			Bundle bundle = billingService.getBuyIntent(Constants.GOOGLE_API_VERSION, contextPackageName, productId, purchaseType, developerPayload);
